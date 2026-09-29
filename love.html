@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Very Important Question ❤️</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #ffd6e5, transparent 35%),
+        radial-gradient(circle at bottom right, #ffb3ca, transparent 35%),
+        linear-gradient(135deg, #fff0f5, #ffe2ec);
+      color: #542238;
+      overflow-x: hidden;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      opacity: 0.25;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) rotate(0deg);
+      }
+      to {
+        transform: translateY(-115vh) rotate(360deg);
+      }
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+    }
+
+    .card {
+      width: min(92vw, 620px);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border-radius: 30px;
+      padding: 40px 30px;
+      box-shadow: 0 20px 60px rgba(143, 51, 85, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      text-align: center;
+    }
+
+    .tiny-label {
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #b24d73;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 7vw, 3.6rem);
+      line-height: 1.05;
+      color: #8d244e;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 5vw, 2.35rem);
+      margin-bottom: 15px;
+      color: #8d244e;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #725062;
+    }
+
+    .intro-heart {
+      font-size: 4rem;
+      display: block;
+      margin: 12px 0;
+      animation: heartbeat 1.5s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      15% {
+        transform: scale(1.14);
+      }
+      30% {
+        transform: scale(1);
+      }
+      45% {
+        transform: scale(1.12);
+      }
+      60% {
+        transform: scale(1);
+      }
+    }
+
+    .progress-wrapper {
+      width: 100%;
+      height: 8px;
+      background: #f5d4e0;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #d84c7c, #ff85ad);
+      transition: width 0.4s ease;
+    }
+
+    .question {
+      display: none;
+      animation: fadeIn 0.45s ease;
+    }
+
+    .question.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .question-number {
+      color: #d15b86;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .subtext {
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      transition: 0.25s ease;
+      font-size: 1rem;
+    }
+
+    .choice-btn,
+    .next-btn,
+    .submit-btn {
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .choice-btn {
+      min-width: 130px;
+      background: #fff;
+      color: #a13760;
+      border: 2px solid #e899b6;
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 18px rgba(188, 80, 120, 0.15);
+    }
+
+    .choice-btn.selected {
+      background: #d94f80;
+      color: white;
+      border-color: #d94f80;
+      transform: scale(1.04);
+    }
+
+    .next-btn,
+    .submit-btn {
+      background: linear-gradient(135deg, #ce396d, #ec6f9c);
+      color: white;
+      margin-top: 25px;
+      box-shadow: 0 10px 24px rgba(190, 64, 110, 0.22);
+    }
+
+    .next-btn:hover,
+    .submit-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .next-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    select {
+      width: 100%;
+      max-width: 420px;
+      padding: 15px 16px;
+      font-size: 1rem;
+      border-radius: 15px;
+      border: 2px solid #eab0c5;
+      background: white;
+      color: #64334a;
+      outline: none;
+      margin-top: 10px;
+    }
+
+    select:focus {
+      border-color: #cc4878;
+      box-shadow: 0 0 0 4px rgba(204, 72, 120, 0.1);
+    }
+
+    .dramatic {
+      font-size: clamp(1.75rem, 5vw, 2.6rem);
+    }
+
+    .dramatic-box {
+      background: linear-gradient(135deg, #fff4f8, #ffe3ed);
+      padding: 22px;
+      border-radius: 22px;
+      margin: 22px 0;
+      border: 1px solid #f2b7cb;
+    }
+
+    .stars {
+      font-size: 1.6rem;
+      letter-spacing: 7px;
+      margin: 8px 0 16px;
+    }
+
+    .success {
+      display: none;
+    }
+
+    .success.active {
+      display: block;
+      animation: fadeIn 0.7s ease;
+    }
+
+    .success-heart {
+      font-size: 5rem;
+      animation: heartbeat 1.4s infinite;
+    }
+
+    .love-note {
+      margin-top: 20px;
+      padding: 20px;
+      background: #fff2f7;
+      border-radius: 20px;
+      font-style: italic;
+    }
+
+    #errorMessage {
+      color: #ae214e;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .signature {
+      margin-top: 30px;
+      font-family: Georgia, serif;
+      font-size: 1.3rem;
+      color: #a13560;
+    }
+
+    @media (max-width: 520px) {
+      .card {
+        padding: 32px 20px;
+      }
+
+      .choice-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="page">
+
+    <div class="card">
+
+      <div id="formSection">
+
+        <div class="tiny-label">A message for my favorite person</div>
+
+        <div class="progress-wrapper">
+          <div id="progress"></div>
+        </div>
+
+        <form id="dateForm">
+
+          <!-- QUESTION 1 -->
+          <section class="question active" data-step="1">
+            <div class="question-number">Question 1 of 5</div>
+
+            <span class="intro-heart">❤️</span>
+
+            <h1>Hi Beautiful.</h1>
+
+            <p class="subtext">
+              I have a very serious, extremely important,
+              potentially life-changing question for you...
+            </p>
+
+            <h2>Would you like to go on a date with me?</h2>
+
+            <div class="button-row">
+              <button
+                type="button"
+                class="choice-btn"
+                data-name="Go on a date?"
+                data-value="YES ❤️"
+              >
+                Yes ❤️
+              </button>
+
+              <button
+                type="button"
+                class="choice-btn"
+                data-name="Go on a date?"
+                data-value="No 😭"
+              >
+                No 😭
+              </button>
+            </div>
+
+            <button type="button" class="next-btn" disabled>
+              Continue →
+            </button>
+          </section>
+
+
+          <!-- QUESTION 2 -->
+          <section class="question" data-step="2">
+            <div class="question-number">Question 2 of 5</div>
+
+            <h2>Wait...</h2>
+
+            <span class="intro-heart">🤨💕</span>
+
+            <h2>Are you sure?</h2>
+
+            <p class="subtext">
+              Because this is your official opportunity to reconsider
+              this very serious commitment to spending time with me.
+            </p>
+
+            <div class="button-row">
+              <button
+                type="button"
+                class="choice-btn"
+                data-name="Is she sure?"
+                data-value="YES, I'M SURE 💗"
+              >
+                Yes, I'm sure 💗
+              </button>
+
+              <button
+                type="button"
+                class="choice-btn"
+                data-name="Is she sure?"
+                data-value="No, I've changed my mind 😭"
+              >
+                Actually... no 😭
+              </button>
+            </div>
+
+            <button type="button" class="next-btn" disabled>
+              Continue →
+            </button>
+          </section>
+
+
+          <!-- QUESTION 3 -->
+          <section class="question" data-step="3">
+            <div class="question-number">Question 3 of 5</div>
+
+            <span class="intro-heart">📅</span>
+
+            <h2>When shall this legendary date occur?</h2>
+
+            <p class="subtext">
+              Pick the day that works best for you, my love.
+            </p>
+
+            <select id="dateChoice" name="Preferred Date" required>
+              <option value="">Choose our date ❤️</option>
+            </select>
+
+            <br>
+
+            <button type="button" class="next-btn" disabled>
+              Continue →
+            </button>
+          </section>
+
+
+          <!-- QUESTION 4 -->
+          <section class="question" data-step="4">
+            <div class="question-number">Question 4 of 5</div>
+
+            <span class="intro-heart">🥰</span>
+
+            <h2>What kind of date are you feeling?</h2>
+
+            <p class="subtext">
+              The girlfriend date-planning committee has prepared
+              several excellent options.
+            </p>
+
+            <select id="dateType" name="Date Idea" required>
+              <option value="">Choose your adventure 💕</option>
+
+              <option value="Dinner Date">
+                🍝 Dinner Date
+              </option>
+
+              <option value="Bowling Date">
+                🎳 Bowling Date
+              </option>
+
+              <option value="Picnic Date">
+                🧺 Picnic Date
+              </option>
+
+              <option value="Adventure Date - Something New">
+                🌎 Adventure Date — Something New
+              </option>
+
+              <option value="Sightseeing Date">
+                🌅 Sightseeing Date
+              </option>
+
+              <option value="Arcade Date">
+                🕹️ Arcade Date
+              </option>
+
+              <option value="Movie Date">
+                🎬 Movie Date
+              </option>
+
+              <option value="Beach Sunset Date">
+                🌊 Beach + Sunset Date
+              </option>
+
+              <option value="Museum / Art Date">
+                🖼️ Museum / Art Date
+              </option>
+
+              <option value="Mini Golf Date">
+                ⛳ Mini Golf Date
+              </option>
+
+              <option value="Surprise Me">
+                💌 Surprise Me — You Plan Everything
+              </option>
+            </select>
+
+            <br>
+
+            <button type="button" class="next-btn" disabled>
+              Continue →
+            </button>
+          </section>
+
+
+          <!-- QUESTION 5 -->
+          <section class="question" data-step="5">
+            <div class="question-number">THE FINAL QUESTION</div>
+
+            <div class="dramatic-box">
+
+              <div class="stars">
+                ✨ ✨ ✨
+              </div>
+
+              <h2 class="dramatic">
+                One final matter remains...
+              </h2>
+
+              <p>
+                Imagine this:
+              </p>
+
+              <br>
+
+              <p>
+                Our date has come to an end.
+                The night is quiet.
+                The stars are above us.
+                We're standing together...
+              </p>
+
+              <br>
+
+              <h2>
+                Would you like to get ice cream with me...
+              </h2>
+
+              <h2>
+                and then kiss me under the stars?
+              </h2>
+
+              <div class="stars">
+                🌙 ⭐️ 💋 ⭐️ 🌙
+              </div>
+
+            </div>
+
+            <div class="button-row">
+
+              <button
+                type="button"
+                class="choice-btn"
+                data-name="Ice cream and kiss under the stars?"
+                data-value="ABSOLUTELY YES 🍦💋✨"
+              >
+                Absolutely. 🍦💋✨
+              </button>
+
+              <button
+                type="button"
+                class="choice-btn"
+                data-name="Ice cream and kiss under the stars?"
+                data-value="Yes but she's pretending to be shy 🥺"
+              >
+                Yes... but I'm shy 🥺
+              </button>
+
+            </div>
+
+            <button type="submit" class="submit-btn" disabled>
+              Send My Date Request 💌
+            </button>
+
+            <p id="errorMessage">
+              Something went wrong sending your answers. Please try again ❤️
+            </p>
+
+          </section>
+
+          <!-- Hidden fields populated by JavaScript -->
+          <input type="hidden" name="Go on a date?" id="answer1">
+
+          <input type="hidden" name="Is she sure?" id="answer2">
+
+          <input
+            type="hidden"
+            name="Ice cream and kiss under the stars?"
+            id="answer5"
+          >
+
+        </form>
+
+      </div>
+
+
+      <!-- SUCCESS PAGE -->
+      <div class="success" id="successScreen">
+
+        <div class="success-heart">
+          💌
+        </div>
+
+        <div class="tiny-label">
+          OFFICIAL GIRLFRIEND DATE REQUEST SYSTEM
+        </div>
+
+        <h1>Request Received.</h1>
+
+        <p>
+          Your extremely important date preferences have been
+          successfully submitted for review.
+        </p>
+
+        <div class="love-note">
+          But between you and me...
+          <br><br>
+          your application was accepted before you even filled this out.
+          ❤️
+        </div>
+
+        <h2 style="margin-top: 28px;">
+          I love you very, very much.
+        </h2>
+
+        <p>
+          Thank you for being my favorite person,
+          my favorite adventure,
+          and the person I always want beside me.
+        </p>
+
+        <p class="signature">
+          Forever yours ❤️
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+    ===========================================================
+                  IMPORTANT — FORM STORAGE SETUP
+
+    1. Go to https://formspree.io
+    2. Create a free account.
+    3. Create a new form.
+    4. Formspree will give you an endpoint similar to:
+
+       https://formspree.io/f/abcdefgh
+
+    5. Replace YOUR_FORM_ID below with your actual ID.
+
+    ===========================================================
+    */
+
+  const FORMSPREE_URL = "https://formspree.io/f/xwlpabdg";
+
+
+    const questions =
+      document.querySelectorAll(".question");
+
+    const progress =
+      document.getElementById("progress");
+
+    const form =
+      document.getElementById("dateForm");
+
+    const dateChoice =
+      document.getElementById("dateChoice");
+
+    const dateType =
+      document.getElementById("dateType");
+
+    const successScreen =
+      document.getElementById("successScreen");
+
+    const formSection =
+      document.getElementById("formSection");
+
+    let currentStep = 1;
+
+
+    /*
+    ===========================================================
+                        DATE DROPDOWN
+          September 30, 2026 → October 30, 2026
+    ===========================================================
+    */
+
+    const startDate =
+      new Date(2026, 8, 30);
+
+    const endDate =
+      new Date(2026, 9, 30);
+
+    let currentDate =
+      new Date(startDate);
+
+    while (currentDate <= endDate) {
+
+      const option =
+        document.createElement("option");
+
+      const prettyDate =
+        currentDate.toLocaleDateString(
+          "en-US",
+          {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+          }
+        );
+
+      option.value = prettyDate;
+      option.textContent = prettyDate;
+
+      dateChoice.appendChild(option);
+
+      currentDate.setDate(
+        currentDate.getDate() + 1
+      );
+    }
+
+
+    /*
+    ===========================================================
+                         PROGRESS BAR
+    ===========================================================
+    */
+
+    function updateProgress() {
+
+      const percent =
+        ((currentStep - 1) / 5) * 100;
+
+      progress.style.width =
+        percent + "%";
+    }
+
+
+    /*
+    ===========================================================
+                        CHANGE QUESTION
+    ===========================================================
+    */
+
+    function goToNextQuestion() {
+
+      questions.forEach(question => {
+        question.classList.remove("active");
+      });
+
+      currentStep++;
+
+      const nextQuestion =
+        document.querySelector(
+          `[data-step="${currentStep}"]`
+        );
+
+      if (nextQuestion) {
+        nextQuestion.classList.add("active");
+      }
+
+      updateProgress();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+
+    /*
+    ===========================================================
+                      YES / NO BUTTONS
+    ===========================================================
+    */
+
+    document
+      .querySelectorAll(".choice-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          function () {
+
+            const parentQuestion =
+              this.closest(".question");
+
+            const buttons =
+              parentQuestion.querySelectorAll(
+                ".choice-btn"
+              );
+
+            buttons.forEach(btn => {
+              btn.classList.remove("selected");
+            });
+
+            this.classList.add("selected");
+
+            const fieldName =
+              this.dataset.name;
+
+            const value =
+              this.dataset.value;
+
+
+            if (
+              fieldName ===
+              "Go on a date?"
+            ) {
+
+              document.getElementById(
+                "answer1"
+              ).value = value;
+
+            }
+
+            if (
+              fieldName ===
+              "Is she sure?"
+            ) {
+
+              document.getElementById(
+                "answer2"
+              ).value = value;
+
+            }
+
+            if (
+              fieldName ===
+              "Ice cream and kiss under the stars?"
+            ) {
+
+              document.getElementById(
+                "answer5"
+              ).value = value;
+
+            }
+
+
+            const nextButton =
+              parentQuestion.querySelector(
+                ".next-btn, .submit-btn"
+              );
+
+            if (nextButton) {
+              nextButton.disabled = false;
+            }
+
+          }
+        );
+
+      });
+
+
+    /*
+    ===========================================================
+                         NEXT BUTTONS
+    ===========================================================
+    */
+
+    document
+      .querySelectorAll(".next-btn")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          goToNextQuestion
+        );
+
+      });
+
+
+    /*
+    ===========================================================
+                  ENABLE DATE QUESTION BUTTON
+    ===========================================================
+    */
+
+    dateChoice.addEventListener(
+      "change",
+      function () {
+
+        const question =
+          this.closest(".question");
+
+        const nextButton =
+          question.querySelector(
+            ".next-btn"
+          );
+
+        nextButton.disabled =
+          this.value === "";
+
+      }
+    );
+
+
+    /*
+    ===========================================================
+                ENABLE DATE TYPE BUTTON
+    ===========================================================
+    */
+
+    dateType.addEventListener(
+      "change",
+      function () {
+
+        const question =
+          this.closest(".question");
+
+        const nextButton =
+          question.querySelector(
+            ".next-btn"
+          );
+
+        nextButton.disabled =
+          this.value === "";
+
+      }
+    );
+
+
+    /*
+    ===========================================================
+                         SUBMIT FORM
+    ===========================================================
+    */
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+        const submitButton =
+          document.querySelector(
+            ".submit-btn"
+          );
+
+        const errorMessage =
+          document.getElementById(
+            "errorMessage"
+          );
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+          "Sending your love letter... 💌";
+
+        errorMessage.style.display =
+          "none";
+
+
+        const formData =
+          new FormData(form);
+
+
+        /*
+        Adds submission time automatically.
+        */
+
+        formData.append(
+          "Submitted At",
+          new Date().toLocaleString()
+        );
+
+
+        try {
+
+          const response =
+            await fetch(
+              FORMSPREE_URL,
+              {
+                method: "POST",
+                body: formData,
+                headers: {
+                  Accept: "application/json"
+                }
+              }
+            );
+
+
+          if (response.ok) {
+
+            progress.style.width =
+              "100%";
+
+            formSection.style.display =
+              "none";
+
+            successScreen.classList.add(
+              "active"
+            );
+
+            createLoveExplosion();
+
+          }
+
+          else {
+
+            throw new Error(
+              "Submission failed"
+            );
+
+          }
+
+        }
+
+        catch (error) {
+
+          errorMessage.style.display =
+            "block";
+
+          submitButton.disabled =
+            false;
+
+          submitButton.textContent =
+            "Send My Date Request 💌";
+
+        }
+
+      }
+    );
+
+
+    /*
+    ===========================================================
+                    BACKGROUND HEARTS
+    ===========================================================
+    */
+
+    function createHeart() {
+
+      const heart =
+        document.createElement("div");
+
+      heart.classList.add("heart");
+
+      const heartOptions =
+        ["❤️", "💕", "💗", "💖", "💘"];
+
+      heart.textContent =
+        heartOptions[
+          Math.floor(
+            Math.random() *
+            heartOptions.length
+          )
+        ];
+
+      heart.style.left =
+        Math.random() * 100 + "vw";
+
+      heart.style.fontSize =
+        (Math.random() * 20 + 15) +
+        "px";
+
+      heart.style.animationDuration =
+        (Math.random() * 8 + 7) +
+        "s";
+
+      document
+        .getElementById("hearts")
+        .appendChild(heart);
+
+      setTimeout(
+        () => heart.remove(),
+        15000
+      );
+    }
+
+    setInterval(createHeart, 750);
+
+
+    /*
+    ===========================================================
+                 SUCCESS SCREEN HEART EXPLOSION
+    ===========================================================
+    */
+
+    function createLoveExplosion() {
+
+      for (
+        let i = 0;
+        i < 35;
+        i++
+      ) {
+
+        setTimeout(
+          createHeart,
+          i * 80
+        );
+
+      }
+
+    }
+
+
+    updateProgress();
+
+  </script>
+
+</body>
+</html>
